@@ -125,9 +125,9 @@ namespace mc68k
 	bool Mc68k::hasPendingInterrupt(uint8_t _vector, uint8_t _level) const
 	{
 		const auto& ints = m_pendingInterrupts[_level];
-		for (const uint8 i : ints)
+		for(size_t i = 0; i < ints.size(); ++i)
 		{
-			if(i == _vector)
+			if(ints[i] == _vector)
 				return true;
 		}
 		return false;
@@ -141,12 +141,12 @@ namespace mc68k
 	bool Mc68k::removePendingInterrupt(const uint8_t _vector, const uint8_t _level)
 	{
 		auto& vecs = m_pendingInterrupts[_level];
-		for(auto it = vecs.begin(); it != vecs.end(); ++it)
+		for(size_t i = 0; i < vecs.size(); ++i)
 		{
-			if(*it != _vector)
+			if(vecs[i] != _vector)
 				continue;
 
-			vecs.erase(it);
+			vecs.erase(i);
 			// Recompute the IPL from what remains; drops the line if this level is now empty.
 			raiseIPL();
 			return true;

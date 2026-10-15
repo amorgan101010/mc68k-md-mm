@@ -31,6 +31,7 @@ set(SOURCES
 	cpuState.h
 	gpt.cpp gpt.h
 	hdi08.cpp hdi08.h
+	ringQueue.h
 	hdi08periph.h
 	logging.cpp logging.h
 	mc68k.cpp mc68k.h
@@ -71,8 +72,14 @@ if(BUILD_TESTING)
 	add_test(NAME mc68kColdFireDivideTest COMMAND mc68kColdFireDivideTest)
 	set_tests_properties(mc68kColdFireDivideTest PROPERTIES LABELS "UnitTest")
 
+	add_executable(mc68kRingQueueTest test/ring_queue_test.cpp)
+	target_include_directories(mc68kRingQueueTest PRIVATE ${CMAKE_CURRENT_SOURCE_DIR})
+	target_compile_features(mc68kRingQueueTest PRIVATE cxx_std_17)
+	add_test(NAME mc68kRingQueueTest COMMAND mc68kRingQueueTest)
+	set_tests_properties(mc68kRingQueueTest PROPERTIES LABELS "UnitTest")
+
 	# Integrations can require this fixture so focused CTest selections still
 	# exercise the instruction and host-port contracts they depend on.
 	set_tests_properties(mc68kColdFireTimingTest mc68kHdi08ReceiveTest
-		mc68kColdFireDivideTest PROPERTIES FIXTURES_SETUP Mc68kCore)
+		mc68kColdFireDivideTest mc68kRingQueueTest PROPERTIES FIXTURES_SETUP Mc68kCore)
 endif()
