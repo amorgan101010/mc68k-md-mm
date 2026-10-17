@@ -6,6 +6,7 @@
 #include "endian.h"
 #include "gpt.h"
 #include "qsm.h"
+#include "ringQueue.h"
 #include "sim.h"
 
 namespace mc68k
@@ -126,7 +127,7 @@ namespace mc68k
 		Sim m_sim;
 		Qsm m_qsm;
 		
-		std::array<std::deque<uint8_t>, 8> m_pendingInterrupts;
+		std::array<RingQueue<uint8_t>, 8> m_pendingInterrupts;
 
 		uint64_t m_cycles = 0;
 	};

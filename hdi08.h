@@ -5,6 +5,7 @@
 #include <functional>
 
 #include "peripheralBase.h"
+#include "ringQueue.h"
 
 namespace mc68k
 {
@@ -160,9 +161,9 @@ namespace mc68k
 		std::array<uint8_t, 3> m_txBytes{};
 
 		std::deque<uint32_t> m_txData;
-		std::deque<uint32_t> m_rxData;
+		RingQueue<uint32_t> m_rxData{64};
 		uint32_t m_rxd = 0;
-		std::deque<uint8_t> m_pendingInterruptRequests;
+		RingQueue<uint8_t> m_pendingInterruptRequests{16};
 		uint32_t m_readTimeoutCycles = 0;
 
 		CallbackRxEmpty m_rxEmptyCallback;
